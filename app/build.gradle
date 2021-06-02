@@ -3,6 +3,10 @@ plugins {
     id 'kotlin-android'
 }
 
+//for mainActivity to access xml file
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
