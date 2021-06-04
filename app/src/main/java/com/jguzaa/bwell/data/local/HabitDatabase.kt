@@ -1,9 +1,10 @@
-package com.jguzaa.bwell.data
+package com.jguzaa.bwell.data.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.jguzaa.bwell.data.Habit
 
 @Database(entities = [Habit::class], version = 1, exportSchema = false)
 abstract class HabitDatabase : RoomDatabase() {
