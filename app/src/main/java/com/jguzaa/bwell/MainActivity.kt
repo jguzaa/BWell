@@ -8,11 +8,10 @@ import com.jguzaa.bwell.databinding.ActivityMainBinding
 import com.jguzaa.bwell.fragments.AccountFragment
 import com.jguzaa.bwell.fragments.HomeFragment
 import com.jguzaa.bwell.fragments.SettingFragment
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    //lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     //setup fragments
     private val homeFragment = HomeFragment()
@@ -21,16 +20,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //setContentView(R.layout.activity_main)
 
-        //view binding -> deprecated
-        //binding = ActivityMainBinding.inflate(layoutInflater)
-        //setContentView(binding.root)
+        //view binding
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setCurrentFragment(homeFragment)
 
         //Set bottom bar onClickListener
-        bottom_navigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.ic_home -> setCurrentFragment(homeFragment)
                 R.id.ic_account -> setCurrentFragment(accountFragment)
