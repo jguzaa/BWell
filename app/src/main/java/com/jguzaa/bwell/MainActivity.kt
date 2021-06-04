@@ -2,11 +2,10 @@ package com.jguzaa.bwell
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import com.jguzaa.bwell.databinding.ActivityMainBinding
 import com.jguzaa.bwell.fragments.AccountFragment
-import com.jguzaa.bwell.fragments.HomeFragment
+import com.jguzaa.bwell.fragments.Home.HomeFragment
 import com.jguzaa.bwell.fragments.SettingFragment
 
 class MainActivity : AppCompatActivity() {

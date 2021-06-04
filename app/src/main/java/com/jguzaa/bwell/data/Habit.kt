@@ -6,15 +6,28 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "habit_table")
 data class Habit(
+
     @PrimaryKey(autoGenerate = true)
     var habitId: Long = 0L,
 
-    @ColumnInfo(name = "start_time_milli")
-    val startTimeMilli: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "name")
+    var name: String = "",
 
-    @ColumnInfo(name = "end_time_milli")
-    var endTimeMilli: Long = startTimeMilli,
+    @ColumnInfo(name = "notification_time")
+    var notificationTime: Long = 0L,
 
-    @ColumnInfo(name = "quality_rating")
-    var sleepQuality: Int = -1
+    @ColumnInfo(name = "today_finished")
+    var todayFinished: Boolean = false,
+
+    @ColumnInfo(name = "streak")
+    var streak: Int = 0,
+
+    @ColumnInfo(name = "is_snoozed")
+    var isSnoozed: Boolean = false,
+
+    @ColumnInfo(name = "last_day_finished")
+    var lastDayFinished: Long = 0L,
+
+    @ColumnInfo(name = "finish_percentage")
+    var finishPercentages: Int = 0
 )

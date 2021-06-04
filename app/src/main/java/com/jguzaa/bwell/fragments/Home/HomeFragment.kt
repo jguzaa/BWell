@@ -1,4 +1,4 @@
-package com.jguzaa.bwell.fragments
+package com.jguzaa.bwell.fragments.Home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
