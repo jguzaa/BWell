@@ -11,7 +11,11 @@ import com.jguzaa.bwell.R
 import com.jguzaa.bwell.databinding.ActivityMainBinding
 import com.jguzaa.bwell.databinding.FragmentHomeBinding
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jguzaa.bwell.data.local.HabitDatabase
 
@@ -21,12 +25,8 @@ class HomeFragment : Fragment() {
         private const val TAG = "HomeFragment"
     }
 
-    private val viewModel : HomeViewModel by viewModels()
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var recyclerView: RecyclerView
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +45,26 @@ class HomeFragment : Fragment() {
 
         //when fab clicked, direct to create habit activity
         binding.fabButton.setOnClickListener {
-
+            findNavController().navigate(R.id.action_dashboardFragment_to_createHabitFragment)
         }
+
+        val manager = LinearLayoutManager(activity)
+        binding.habitList.layoutManager = manager
+
+        val adapter = HabitAdapter(HabitListener { habitId ->
+            Log.d(TAG, "list tabbed = $habitId")
+        })
+        binding.habitList.adapter = adapter
+
+        viewModel.habits.observe(viewLifecycleOwner, Observer {
+            it?.let{
+                adapter.submitList(it)
+            }
+        })
 
         // Inflate the layout for this fragment
         return binding.root
 
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recyclerView = binding.habitList
     }
 
     override fun onDestroyView() {

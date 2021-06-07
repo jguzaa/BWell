@@ -8,5 +8,20 @@
         android:id="@+id/dashboardFragment"
         android:name="com.jguzaa.bwell.fragments.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_createHabitFragment"
+            app:destination="@id/createHabitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createHabitFragment"
+        android:name="com.jguzaa.bwell.fragments.createHabit.CreateHabitFragment"
+        android:label="fragment_create_habit"
+        tools:layout="@layout/fragment_create_habit" >
+        <action
+            android:id="@+id/action_createHabitFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

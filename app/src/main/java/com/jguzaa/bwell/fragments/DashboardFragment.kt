@@ -1,6 +1,11 @@
 package com.jguzaa.bwell.fragments
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +19,11 @@ import com.jguzaa.bwell.fragments.home.HomeViewModel
 
 class DashboardFragment : Fragment() {
 
+    companion object {
+        //fun newInstance() = DashboardFragment()
+        private const val TAG = "DashboardFragment"
+    }
+
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
 
@@ -21,11 +31,6 @@ class DashboardFragment : Fragment() {
     private val homeFragment = HomeFragment()
     private val settingFragment = SettingFragment()
     private val accountFragment = AccountFragment()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +41,12 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
         setCurrentFragment(homeFragment)
+
+        //create channel
+        createChannel(
+            getString(R.string.habit_notification_channel_id),
+            getString(R.string.habit_notification_channel_name)
+        )
 
         //Set bottom bar onClickListener
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
@@ -62,6 +73,25 @@ class DashboardFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun createChannel(channelId: String, channelName: String) {
+
+        Log.d(TAG, "Channel created")
+
+        //START create a channel
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val notificationChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = "Habit"
+            notificationChannel.setShowBadge(false)
+
+            val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
     }
 
 }

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">BWell</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notification_msg">It\'s time to finish the activity!</string>
+    <string name="habit_notification_channel_id" translatable="false">habit_channel</string>
+    <string name="habit_notification_channel_name" translatable="true">Habit</string>
 </resources>
