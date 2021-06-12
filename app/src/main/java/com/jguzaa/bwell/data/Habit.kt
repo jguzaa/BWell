@@ -29,5 +29,11 @@ data class Habit(
     var lastDayFinished: Long = 0L,
 
     @ColumnInfo(name = "finish_percentage")
-    var finishPercentages: Int = 0
-)
+    var finishPercentages: Int = 0,
+
+    @ColumnInfo(name = "type")
+    var type: HabitsType = HabitsType.DAILY_TRACKING
+){
+    //setter and getter
+
+}

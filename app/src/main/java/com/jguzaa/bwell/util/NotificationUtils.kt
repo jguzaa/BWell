@@ -20,7 +20,7 @@ private const val TAG = "NotificationUtils"
 
 fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
 
-    Log.d(TAG, "sendNoti triggered")
+    Log.d(TAG, "getNotification triggered")
 
     //Create intent when notification pressed
 //    val contentIntent = Intent(applicationContext, MainActivity::class.java)

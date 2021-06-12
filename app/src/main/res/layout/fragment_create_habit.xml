@@ -11,64 +11,126 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.createHabit.CreateHabitFragment">
+        android:layout_height="wrap_content"
+        android:isScrollContainer="true">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            tools:context=".fragments.createHabit.CreateHabitFragment"
+            android:gravity="center"
+            android:overScrollMode="ifContentScrolls">
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginBottom="16dp"
-                />
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="16dp"/>
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="16dp"
-                android:onClick="@{() -> createHabitViewModel.startTimer()}"/>
-
-            <TextView
-                android:id="@+id/textView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/topBar"
+                android:background="@color/deep_orange_400"
+                android:padding="16dp">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/back_btn"
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@color/deep_orange_400"
+                    android:contentDescription="@string/back_bth_content_des" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_habit"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toEndOf="@id/back_btn"
+                    app:layout_constraintTop_toTopOf="@id/back_btn"
+                    app:layout_constraintBottom_toBottomOf="@id/back_btn"
+                    android:layout_marginStart="16dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/addImg"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_margin="16dp"
+                android:importantForContentCapture="no"
+                android:src="@drawable/add"
+                android:importantForAccessibility="no"/>
+
+            <EditText
+                android:id="@+id/habitName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:ems="10"
+                android:hint="@string/setup_name_hint"
+                android:inputType="textPersonName"
                 android:textAlignment="center"
-                tools:text="9"
-                app:elapsedTime="@{createHabitViewModel.elapsedTime}"
+                android:textSize="24sp"
+                android:autofillHints="add habit here"
                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/habit_type_label"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:layout_marginTop="32dp"
+                />
+
+            <Spinner
+                android:id="@+id/habit_type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:entries="@array/habit_type_array"
+                 />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/noti_time_label"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:layout_marginTop="32dp"
+                />
+
+            <Button
+                android:id="@+id/time_picker_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_picker_btn_label"
+                android:layout_marginTop="16dp"
+                />
+
+            <TextView
+                android:id="@+id/time_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="19.00"
+                android:textSize="24sp"
+                android:layout_marginTop="16dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_btn"
+                android:text="@string/add_habit_btn_label"
+                android:layout_marginTop="48dp"
+                app:icon="@drawable/ic_add" />
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>
 

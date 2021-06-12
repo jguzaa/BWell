@@ -11,7 +11,7 @@ import com.jguzaa.bwell.data.Habit
 interface HabitDatabaseDao {
 
     @Insert
-    suspend fun insert(habit: Habit)
+    suspend fun insert(habit: Habit): Long
 
     @Update
     suspend fun update(habit: Habit)
@@ -26,7 +26,9 @@ interface HabitDatabaseDao {
     @Query("SELECT * FROM habit_table ORDER BY habitId")
     fun getAllHabits(): LiveData<List<Habit>>
 
-    //select and return the livedata habit
     @Query("SELECT * from habit_table WHERE habitId = :key")
     fun getHabitWithId(key: Long): LiveData<Habit>
+
+    @Query("SELECT * FROM habit_table ORDER BY habitId DESC LIMIT 1")
+    suspend fun getLastHabit(): Habit?
 }

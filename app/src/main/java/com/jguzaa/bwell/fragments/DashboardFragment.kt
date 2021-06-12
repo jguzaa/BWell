@@ -42,12 +42,6 @@ class DashboardFragment : Fragment() {
 
         setCurrentFragment(homeFragment)
 
-        //create channel
-        createChannel(
-            getString(R.string.habit_notification_channel_id),
-            getString(R.string.habit_notification_channel_name)
-        )
-
         //Set bottom bar onClickListener
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when(it.itemId){
@@ -73,25 +67,6 @@ class DashboardFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun createChannel(channelId: String, channelName: String) {
-
-        Log.d(TAG, "Channel created")
-
-        //START create a channel
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val notificationChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.RED
-            notificationChannel.enableVibration(true)
-            notificationChannel.description = "Habit"
-            notificationChannel.setShowBadge(false)
-
-            val notificationManager = requireActivity().getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
-
     }
 
 }

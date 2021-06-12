@@ -6,66 +6,55 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.CountDownTimer
-import android.os.SystemClock
 import android.util.Log
-import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.jguzaa.bwell.R
 import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
 import com.jguzaa.bwell.receiver.AlarmReceiver
 import com.jguzaa.bwell.util.cancelNotifications
-import com.jguzaa.bwell.util.sendNotification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
+import timber.log.Timber
 
 class CreateHabitViewModel(
     val database: HabitDatabaseDao,
     application: Application) : AndroidViewModel(application) {
 
-    val app = application
+    private val app = application
 
     companion object {
         private const val TAG = "CreateHabitViewModel"
+        private const val HOUR = "setHour"
+        private const val MINUTE = "setMinute"
+        private const val REQUEST_CODE = 0
+        private const val APP_NAME = "com.jguzaa.bwell"
+        private const val ID = "HabitId"
     }
 
     //========Notification implement
-    private val REQUEST_CODE = 0
-    private val TRIGGER_TIME = "TRIGGER_AT"
-
-    private val second: Long = 1_000L
-
-    private val notifyPendingIntent: PendingIntent
+    private var notifyPendingIntent: PendingIntent
 
     private val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    private var prefs = app.getSharedPreferences("com.jguzaa.bwell", Context.MODE_PRIVATE)
     private val notifyIntent = Intent(app, AlarmReceiver::class.java)
 
-    private val _elapsedTime = MutableLiveData<Long>()
-    val elapsedTime: LiveData<Long>
-        get() = _elapsedTime
-
-    private var _alarmOn = MutableLiveData<Boolean>()
-    val isAlarmOn: LiveData<Boolean>
-        get() = _alarmOn
+    //Habit properties
+    private var setHour: Int = 0
+    private var setMinute: Int = 0
+    private var triggerTime = 0L
+    var habit = Habit()
 
 
-    private lateinit var timer: CountDownTimer
+    //pref for recovery data after reboot
+    private var prefs = app.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE)
 
     init {
-        _alarmOn.value = PendingIntent.getBroadcast(
-            getApplication(),
-            REQUEST_CODE,
-            notifyIntent,
-            PendingIntent.FLAG_NO_CREATE
-        ) != null
 
         notifyPendingIntent = PendingIntent.getBroadcast(
             getApplication(),
@@ -74,87 +63,75 @@ class CreateHabitViewModel(
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        //If alarm is not null, resume the timer back for this alarm
-        if (_alarmOn.value!!) {
-            createTimer()
-        }
-
     }
 
-    fun startTimer() {
-        Log.d(TAG, "clicked")
+    private fun setAlarm(){
+        Log.d(TAG, "setAlarm, id from dao = ${habit.habitId}")
+        //set the data to pending intent
+        notifyIntent.putExtra(ID,habit.habitId)
+        notifyIntent.action = APP_NAME
 
-        //Notification calling
-//        val notificationManager = ContextCompat.getSystemService(app, NotificationManager::class.java) as NotificationManager
-//        notificationManager.sendNotification(app.getString(R.string.notification_msg), app)
+        notifyPendingIntent = PendingIntent.getBroadcast(
+            getApplication(),
+            REQUEST_CODE,
+            notifyIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
-        _alarmOn.value?.let {
-            if (!it) {
-                Log.d(TAG, "in alarm on")
-                _alarmOn.value = true
-                val selectedInterval = second * 2
-                val triggerTime = SystemClock.elapsedRealtime() + selectedInterval
-
-                // cancel old notification before start the new one
-                val notificationManager = ContextCompat.getSystemService(app, NotificationManager::class.java) as NotificationManager
-                notificationManager.cancelNotifications()
-
-                //Alarm manager for pending intent to run in the background
-                AlarmManagerCompat.setExactAndAllowWhileIdle(
-                    alarmManager,
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    triggerTime,
-                    notifyPendingIntent
-                )
-
-                viewModelScope.launch {
-                    saveTime(triggerTime)
-                }
-            }
-        }
-        createTimer()
+        //Alarm manager for pending intent to run in the background
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            triggerTime,
+            AlarmManager.INTERVAL_DAY,
+            notifyPendingIntent
+        )
     }
 
-    private fun createTimer() {
+    fun start(){
         viewModelScope.launch {
-            val triggerTime = loadTime()
-            timer = object : CountDownTimer(triggerTime, second) {
-                override fun onTick(millisUntilFinished: Long) {
-                    _elapsedTime.value = triggerTime - SystemClock.elapsedRealtime()
-                    if (_elapsedTime.value!! <= 0) {
-                        resetTimer()
-                    }
-                }
-
-                override fun onFinish() {
-                    resetTimer()
-                }
-            }
-            timer.start()
+            habit.habitId = getLastHabitId() + 1
         }
     }
 
-    private fun resetTimer() {
-        timer.cancel()
-        _elapsedTime.value = 0
-        _alarmOn.value = false
-    }
+    fun createHabit() {
 
-    private suspend fun saveTime(triggerTime: Long) =
-        withContext(Dispatchers.IO) {
-            prefs.edit().putLong(TRIGGER_TIME, triggerTime).apply()
-        }
+        Log.d(TAG, "Clicked, Hour = $setHour, Min = $setMinute")
+        Log.d(TAG, "Clicked, Habit name = ${habit.name}")
 
-    private suspend fun loadTime(): Long =
-        withContext(Dispatchers.IO) {
-            prefs.getLong(TRIGGER_TIME, 0)
-        }
+        // cancel old notification before start the new one
+        val notificationManager = ContextCompat.getSystemService(app, NotificationManager::class.java) as NotificationManager
+        notificationManager.cancelNotifications()
 
-    //===============Database binding
-    fun addHabit(habit: Habit){
+        //set trigger time
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, setHour)
+        calendar.set(Calendar.MINUTE, setMinute)
+        calendar.set(Calendar.SECOND, 0)
+
+        triggerTime = calendar.timeInMillis
+
+        habit.notificationTime = triggerTime
+
         viewModelScope.launch {
-            insert(habit)
+            saveHabit(habit)
+            addHabit()
         }
+
+        setAlarm()
+
+    }
+
+    //===============Database binding==================
+    private suspend fun addHabit() {
+        database.insert(habit)
+    }
+
+    private suspend fun getLastHabitId(): Long {
+        return if (database.getLastHabit() == null)
+            0L
+        else
+            database.getLastHabit()!!.habitId
+
     }
 
     fun onClear(){
@@ -163,11 +140,31 @@ class CreateHabitViewModel(
         }
     }
 
-    private suspend fun insert(habit: Habit) {
-        database.insert(habit)
-    }
-
     private suspend fun clear() {
         database.clear()
     }
+
+
+    //====================Misc======================
+    fun updateCurrentTime(hour:Int, minute:Int){
+        setHour = hour
+        setMinute = minute
+    }
+
+    private suspend fun saveHabit(habitAdd: Habit) =
+        withContext(Dispatchers.IO) {
+            prefs.edit().putLong(ID, habitAdd.habitId).apply()
+        }
+
+    fun loadTime() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val habitId = prefs.getLong(ID, 0L)
+                //habit = database.getHabitWithId(habitId)!!
+                Log.d(TAG, "Load, habit id = ${habit.habitId}")
+                setAlarm()
+            }
+        }
+    }
+
 }

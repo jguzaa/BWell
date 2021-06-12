@@ -1,7 +1,22 @@
 <resources>
     <string name="app_name">BWell</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Notification -->
     <string name="notification_msg">It\'s time to finish the activity!</string>
     <string name="habit_notification_channel_id" translatable="false">habit_channel</string>
     <string name="habit_notification_channel_name" translatable="true">Habit</string>
+
+    <!-- Top bar -->
+    <string name="create_habit">Set up your habit</string>
+    <string name="account">Manage your account</string>
+    <string name="settings">Application Settings</string>
+    <string name="back_bth_content_des">Back to dashboard</string>
+
+    <!-- create habit -->
+    <string name="setup_name_hint">Name your habit here</string>
+    <string name="habit_type_label">Choose your habit type</string>
+    <string name="noti_time_label">Set notification time</string>
+    <string name="time_picker_btn_label">Open time picker</string>
+    <string name="add_habit_btn_label">Add habit</string>
+
 </resources>

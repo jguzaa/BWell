@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="habit_type_array">
+        <item>Daily-Tracking</item>
+        <item>Alarm clock</item>
+        <item>Jogging</item>
+    </string-array>
+</resources>
