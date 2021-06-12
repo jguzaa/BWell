@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import timber.log.Timber
 
 class CreateHabitViewModel(
     val database: HabitDatabaseDao,
@@ -114,16 +113,17 @@ class CreateHabitViewModel(
 
         viewModelScope.launch {
             saveHabit(habit)
-            addHabit()
         }
-
+        addHabit()
         setAlarm()
 
     }
 
     //===============Database binding==================
-    private suspend fun addHabit() {
-        database.insert(habit)
+    private fun addHabit() {
+        viewModelScope.launch{
+            database.insert(habit)
+        }
     }
 
     private suspend fun getLastHabitId(): Long {
@@ -154,13 +154,16 @@ class CreateHabitViewModel(
     private suspend fun saveHabit(habitAdd: Habit) =
         withContext(Dispatchers.IO) {
             prefs.edit().putLong(ID, habitAdd.habitId).apply()
+            prefs.edit().putInt(HOUR, setHour).apply()
+            prefs.edit().putInt(MINUTE, setMinute).apply()
         }
 
     fun loadTime() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val habitId = prefs.getLong(ID, 0L)
-                //habit = database.getHabitWithId(habitId)!!
+                habit.habitId = prefs.getLong(ID, 0L)
+                setHour = prefs.getInt(HOUR, 0)
+                setMinute = prefs.getInt(MINUTE, 0)
                 Log.d(TAG, "Load, habit id = ${habit.habitId}")
                 setAlarm()
             }

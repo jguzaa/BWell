@@ -31,4 +31,7 @@ interface HabitDatabaseDao {
 
     @Query("SELECT * FROM habit_table ORDER BY habitId DESC LIMIT 1")
     suspend fun getLastHabit(): Habit?
+
+    @Query("SELECT * from habit_table WHERE habitId = :key")
+    suspend fun getHabitWithIdNonLiveReturn(key: Long): Habit?
 }
