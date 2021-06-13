@@ -22,6 +22,7 @@ import com.jguzaa.bwell.databinding.FragmentCreateHabitBinding
 import com.jguzaa.bwell.fragments.home.HomeViewModel
 import com.jguzaa.bwell.fragments.home.HomeViewModelFactory
 import java.util.*
+import androidx.lifecycle.Observer
 
 class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
 
@@ -54,6 +55,14 @@ class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
 
         viewModel.start()
 
+        viewModel.dataLoading.observe(viewLifecycleOwner, { isLoading ->
+            if(isLoading)
+                binding.progressBar.visibility = View.VISIBLE
+            else
+                binding.progressBar.visibility = View.GONE
+
+        })
+
         binding.timePickerBtn.setOnClickListener {
             getCurrentTime()
             TimePickerDialog(context, this, hour, minute, true).show()
@@ -79,7 +88,6 @@ class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-
         viewModel.updateCurrentTime(hourOfDay, minute)
         binding.timeSet.text = "$hourOfDay : $minute"
     }

@@ -13,10 +13,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jguzaa.bwell.data.Habit
+import com.jguzaa.bwell.data.HabitsType
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
 import com.jguzaa.bwell.receiver.AlarmReceiver
 import com.jguzaa.bwell.util.cancelNotifications
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -26,6 +28,10 @@ class CreateHabitViewModel(
     application: Application) : AndroidViewModel(application) {
 
     private val app = application
+
+    //Live data while database is loading
+    private val _dataLoading = MutableLiveData<Boolean>()
+    val dataLoading: LiveData<Boolean> = _dataLoading
 
     companion object {
         private const val TAG = "CreateHabitViewModel"
@@ -54,6 +60,8 @@ class CreateHabitViewModel(
     private var prefs = app.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE)
 
     init {
+
+        _dataLoading.value = false
 
         notifyPendingIntent = PendingIntent.getBroadcast(
             getApplication(),
@@ -88,7 +96,9 @@ class CreateHabitViewModel(
 
     fun start(){
         viewModelScope.launch {
+            _dataLoading.value = true
             habit.habitId = getLastHabitId() + 1
+            _dataLoading.value = false
         }
     }
 
@@ -144,11 +154,19 @@ class CreateHabitViewModel(
         database.clear()
     }
 
-
     //====================Misc======================
     fun updateCurrentTime(hour:Int, minute:Int){
         setHour = hour
         setMinute = minute
+    }
+
+    fun setTimeSelected(timerLengthSelection: Int) {
+        when (timerLengthSelection){
+            0 -> habit.type = HabitsType.DAILY_TRACKING
+            1 -> habit.type = HabitsType.ALARM_CLOCK
+            2 -> habit.type = HabitsType.JOGGING
+        }
+        Log.d(TAG, "habit type = ${habit.type}")
     }
 
     private suspend fun saveHabit(habitAdd: Habit) =
