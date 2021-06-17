@@ -1,18 +1,13 @@
 package com.jguzaa.bwell.fragments.habitDetail
 
-import android.app.AlarmManager
 import android.app.Application
-import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jguzaa.bwell.data.HABIT_DATE
 import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
-import com.jguzaa.bwell.receiver.AlarmReceiver
 import com.jguzaa.bwell.util.cancelAlarm
 import com.jguzaa.bwell.util.setAlarm
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +58,7 @@ class HabitDetailViewModel(
     fun dailyReset() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val habitTemp = database.getHabitWithIdNonLiveReturn(habitId)
+                val habitTemp = database.getHabit(habitId)
                 habitTemp!!.todayFinished = false
                 habitTemp.isSnoozed = false
                 Log.d(TAG, "daily reset for id ${habitTemp.habitId}")

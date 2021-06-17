@@ -8,7 +8,7 @@ import com.jguzaa.bwell.data.Habit
 interface HabitDatabaseDao {
 
     @Insert
-    suspend fun insert(habit: Habit)
+    suspend fun insert(habit: Habit): Long
 
     @Update
     suspend fun update(habit: Habit)
@@ -18,16 +18,16 @@ interface HabitDatabaseDao {
 
     //select and return all habits, sort by id
     @Query("SELECT * FROM habit_table ORDER BY habitId")
-    fun getAllHabits(): LiveData<List<Habit>>
+    fun getAllHabitsLiveData(): LiveData<List<Habit>>
 
     @Query("SELECT * from habit_table WHERE habitId = :key")
     fun getHabitWithId(key: Long): LiveData<Habit>
 
-    @Query("SELECT * FROM habit_table ORDER BY habitId DESC LIMIT 1")
-    suspend fun getLastHabit(): Habit?
-
     @Query("SELECT * from habit_table WHERE habitId = :key")
-    fun getHabitWithIdNonLiveReturn(key: Long): Habit?
+    fun getHabit(key: Long): Habit?
+
+    @Query("SELECT * FROM habit_table ORDER BY habitId")
+    fun getAllHabits(): List<Habit>
 
     @Delete
     fun deleteHabit(habit: Habit)

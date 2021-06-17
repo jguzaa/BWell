@@ -50,13 +50,10 @@ class AlarmReceiver: BroadcastReceiver() {
             )
         } else if (intent.action.equals("android.intent.action.BOOT_COMPLETED")){
 
-            //TODO : fix after reboot
             //restore time after rebooted
             val createHabitViewModel = CreateHabitViewModel(dataSource, application)
-
-            Log.d(TAG, "Load alarm after rebooted")
-
             createHabitViewModel.loadTime()
+            Log.d(TAG, "Load alarm after rebooted")
         }
 
     }

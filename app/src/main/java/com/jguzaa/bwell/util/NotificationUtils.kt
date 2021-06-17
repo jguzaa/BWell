@@ -33,10 +33,6 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         R.drawable.logo250
     )
 
-    val bigPictureStyle = NotificationCompat.BigPictureStyle()
-        .bigPicture(logoImage)
-        .bigLargeIcon(null)
-
     // Build the notification
     val builder = NotificationCompat.Builder(
         applicationContext,
@@ -47,7 +43,6 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         .setContentText(messageBody)
         .setContentIntent(contentPendingIntent)
         .setAutoCancel(true)
-        .setStyle(bigPictureStyle)
         .setLargeIcon(logoImage)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
 

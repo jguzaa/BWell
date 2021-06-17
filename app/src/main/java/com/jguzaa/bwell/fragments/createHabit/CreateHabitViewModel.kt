@@ -4,14 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.HabitsType
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
 import com.jguzaa.bwell.util.APP_NAME
-import com.jguzaa.bwell.util.ID
 import com.jguzaa.bwell.util.setAlarm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,36 +21,14 @@ class CreateHabitViewModel(
 
     private val app = application
 
-    //Live data while database is loading
-    private val _dataLoading = MutableLiveData<Boolean>()
-    val dataLoading: LiveData<Boolean> = _dataLoading
-
     companion object {
         private const val TAG = "CreateHabitViewModel"
-        private const val HOUR = "setHour"
-        private const val MINUTE = "setMinute"
     }
 
     //Habit properties
     private var setHour: Int = 0
     private var setMinute: Int = 0
     var habit = Habit()
-
-
-    //pref for recovery data after reboot
-    private var prefs = app.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE)
-
-    init {
-        _dataLoading.value = false
-    }
-
-    fun start(){
-        viewModelScope.launch {
-            _dataLoading.value = true
-            habit.habitId = getLastHabitId() + 1
-            _dataLoading.value = false
-        }
-    }
 
     fun createHabit() {
 
@@ -68,24 +43,18 @@ class CreateHabitViewModel(
 
         habit.notificationTime = calendar.timeInMillis
 
-        viewModelScope.launch {
-            saveHabit(habit)
-        }
         addHabit()
-        setAlarm(habit.habitId, habit.name, app, habit.notificationTime)
 
     }
 
-    //===============Database binding==================
+    //===============Database process==================
     private fun addHabit() {
         viewModelScope.launch{
-            database.insert(habit)
+            withContext(Dispatchers.IO) {
+                habit.habitId = database.insert(habit)
+                setAlarm(habit.habitId, habit.name, app, habit.notificationTime)
+            }
         }
-    }
-
-    private suspend fun getLastHabitId(): Long {
-        return if (database.getLastHabit() == null) 0L
-        else database.getLastHabit()!!.habitId
     }
 
     //====================Misc======================
@@ -103,22 +72,13 @@ class CreateHabitViewModel(
         Log.d(TAG, "habit type = ${habit.type}")
     }
 
-    // TODO: need to update
-    private suspend fun saveHabit(habitAdd: Habit) =
-        withContext(Dispatchers.IO) {
-            prefs.edit().putLong(ID, habitAdd.habitId).apply()
-            prefs.edit().putInt(HOUR, setHour).apply()
-            prefs.edit().putInt(MINUTE, setMinute).apply()
-        }
-
     fun loadTime() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                habit.habitId = prefs.getLong(ID, 0L)
-                setHour = prefs.getInt(HOUR, 0)
-                setMinute = prefs.getInt(MINUTE, 0)
-                Log.d(TAG, "Load, habit id = ${habit.habitId}")
-                //setAlarm()
+                val habits = database.getAllHabits()
+                for(habit in habits){
+                    setAlarm(habit.habitId, habit.name, app, habit.notificationTime)
+                }
             }
         }
     }

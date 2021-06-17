@@ -2,18 +2,16 @@ package com.jguzaa.bwell.fragments.createHabit
 
 import android.app.TimePickerDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.jguzaa.bwell.R
 import com.jguzaa.bwell.data.local.HabitDatabase
 import com.jguzaa.bwell.databinding.FragmentCreateHabitBinding
-import com.jguzaa.bwell.fragments.DashboardFragmentDirections
 import java.util.*
 
 class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
@@ -44,16 +42,6 @@ class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
         viewModel = ViewModelProvider(this, viewModelFactory).get(CreateHabitViewModel::class.java)
         binding.lifecycleOwner = this
         binding.createHabitViewModel = viewModel
-
-        viewModel.start()
-
-        viewModel.dataLoading.observe(viewLifecycleOwner, { isLoading ->
-            if(isLoading)
-                binding.progressBar.visibility = View.VISIBLE
-            else
-                binding.progressBar.visibility = View.GONE
-
-        })
 
         binding.timePickerBtn.setOnClickListener {
             getCurrentTime()

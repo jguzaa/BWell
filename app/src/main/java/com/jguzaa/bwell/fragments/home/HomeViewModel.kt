@@ -13,7 +13,7 @@ class HomeViewModel(
         private const val TAG= "HomeViewModel"
     }
 
-    val habits = database.getAllHabits()
+    val habits = database.getAllHabitsLiveData()
 
     private val _navigateToHabitDetail = MutableLiveData<Long>()
     val navigateToHabitDetail get() = _navigateToHabitDetail
