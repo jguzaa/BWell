@@ -2,27 +2,19 @@ package com.jguzaa.bwell.fragments.createHabit
 
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.jguzaa.bwell.R
-import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.local.HabitDatabase
 import com.jguzaa.bwell.databinding.FragmentCreateHabitBinding
-import com.jguzaa.bwell.fragments.home.HomeViewModel
-import com.jguzaa.bwell.fragments.home.HomeViewModelFactory
+import com.jguzaa.bwell.fragments.DashboardFragmentDirections
 import java.util.*
-import androidx.lifecycle.Observer
 
 class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
 
@@ -48,7 +40,7 @@ class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
 
         val application = requireNotNull(this.activity).application
         val dataSource = HabitDatabase.getInstance(application).habitDatabaseDao
-        val viewModelFactory = CreateHabitVewModelFactory(dataSource, application)
+        val viewModelFactory = CreateHabitViewModelFactory(dataSource, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(CreateHabitViewModel::class.java)
         binding.lifecycleOwner = this
         binding.createHabitViewModel = viewModel
@@ -68,13 +60,18 @@ class CreateHabitFragment : Fragment(),TimePickerDialog.OnTimeSetListener {
             TimePickerDialog(context, this, hour, minute, true).show()
         }
 
-        binding.habitName.doOnTextChanged { text, start, count, after ->
+        binding.habitName.doOnTextChanged { text, _, _, _ ->
             viewModel.habit.name = text.toString()
         }
 
         binding.addBtn.setOnClickListener {
             viewModel.createHabit()
-            findNavController().navigate(R.id.action_createHabitFragment_to_dashboardFragment)
+            findNavController().navigate(CreateHabitFragmentDirections.actionCreateHabitFragmentToDashboardFragment())
+        }
+
+        //when back btn clicked
+        binding.backBtn.setOnClickListener {
+            findNavController().navigate(CreateHabitFragmentDirections.actionCreateHabitFragmentToDashboardFragment())
         }
 
         return binding.root

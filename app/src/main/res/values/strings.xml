@@ -15,7 +15,7 @@
     <!-- create habit -->
     <string name="setup_name_hint">Name your habit here</string>
     <string name="habit_type_label">Choose your habit type</string>
-    <string name="noti_time_label">Set notification time</string>
+    <string name="notification_time_label">Set notification time</string>
     <string name="time_picker_btn_label">Open time picker</string>
     <string name="add_habit_btn_label">Add habit</string>
 
@@ -27,5 +27,16 @@
         <item quantity="other">%d days left</item>
     </plurals>
     <string name="finished">Congratulations, you\'ve finished it</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- habit detail -->
+    <string name="example_habit">Example Habit</string>
+    <string name="keep_up">Keep it up!</string>
+    <string name="done_btn">Done for today</string>
+    <string name="snooze_btn">Snooze for today</string>
+    <string name="customize_btn">Customize habit</string>
+    <string name="confirm_snooze_title">Are you sure?</string>
+    <string name="confirm_snooze_text">If you snooze this time,\nYou will lose all of your habit record! </string>
 
 </resources>

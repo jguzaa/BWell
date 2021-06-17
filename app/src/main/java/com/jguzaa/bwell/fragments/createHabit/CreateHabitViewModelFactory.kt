@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
 import com.jguzaa.bwell.fragments.home.HomeViewModel
 
-class CreateHabitVewModelFactory (
+class CreateHabitViewModelFactory (
     private val dataSource: HabitDatabaseDao,
     private val application: Application) : ViewModelProvider.Factory {
 

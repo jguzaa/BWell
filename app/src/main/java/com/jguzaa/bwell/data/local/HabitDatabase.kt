@@ -6,8 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.jguzaa.bwell.data.Habit
 
-const val HABIT_DATE = 60
-
 @Database(entities = [Habit::class], version = 1, exportSchema = false)
 abstract class HabitDatabase : RoomDatabase() {
 

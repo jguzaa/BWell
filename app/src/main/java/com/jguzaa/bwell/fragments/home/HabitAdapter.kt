@@ -1,19 +1,22 @@
 package com.jguzaa.bwell.fragments.home
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jguzaa.bwell.R
+import com.jguzaa.bwell.data.HABIT_DATE
 import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.HabitsType
-import com.jguzaa.bwell.data.local.HABIT_DATE
 import com.jguzaa.bwell.databinding.ListItemHabitBinding
 
-class HabitAdapter(val clickListener: HabitListener) : ListAdapter<Habit, HabitAdapter.ViewHolder>(HabitDiffCallback()) {
+class HabitAdapter(private val clickListener: HabitListener) : ListAdapter<Habit, HabitAdapter.ViewHolder>(HabitDiffCallback()) {
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position)!!, clickListener)
     }
@@ -24,6 +27,7 @@ class HabitAdapter(val clickListener: HabitListener) : ListAdapter<Habit, HabitA
 
     class ViewHolder private constructor(val context: Context, val binding: ListItemHabitBinding): RecyclerView.ViewHolder(binding.root){
 
+        @RequiresApi(Build.VERSION_CODES.N)
         fun bind(item: Habit, clickListener: HabitListener) {
             binding.habit = item
             binding.clickListener = clickListener
@@ -51,6 +55,9 @@ class HabitAdapter(val clickListener: HabitListener) : ListAdapter<Habit, HabitA
                 } else {
                     context.getString(R.string.finished)
                 }
+
+            binding.progressBar.max = 100
+            binding.progressBar.progress = item.finishPercentages
 
         }
 

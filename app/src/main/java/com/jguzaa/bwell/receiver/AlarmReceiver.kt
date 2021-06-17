@@ -38,9 +38,10 @@ class AlarmReceiver: BroadcastReceiver() {
             //Call notification
             notificationManager.sendNotification(
                 context.getString(R.string.notification_msg),
-                context
+                context,
+                id
             )
-        } else if (intent!!.action.equals("android.intent.action.BOOT_COMPLETED")){
+        } else if (intent.action.equals("android.intent.action.BOOT_COMPLETED")){
             //restore time after rebooted
             val application = context.applicationContext as Application
             val dataSource = HabitDatabase.getInstance(application).habitDatabaseDao

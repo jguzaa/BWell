@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
@@ -18,28 +19,19 @@ private const val REQUEST_CODE = 0
 private const val FLAGS = 0
 private const val TAG = "NotificationUtils"
 
-fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
+fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context, id: Long) {
 
     Log.d(TAG, "getNotification triggered")
 
-    //Create intent when notification pressed
-//    val contentIntent = Intent(applicationContext, MainActivity::class.java)
-
-    //Create pending intent
-
-    //Navigate to main activity
-//    val contentPendingIntent = PendingIntent.getActivity(
-//        applicationContext,
-//        NOTIFICATION_ID,
-//        contentIntent,
-//        PendingIntent.FLAG_UPDATE_CURRENT
-//    )
-
     //Navigate to createHabitFragment
+    val args = Bundle()
+    args.putLong("habitId", id)
+
     val contentPendingIntent = NavDeepLinkBuilder(applicationContext)
         .setComponentName(MainActivity::class.java)
         .setGraph(R.navigation.nav_graph)
-        .setDestination(R.id.createHabitFragment)
+        .setDestination(R.id.habitDetailFragment)
+        .setArguments(args)
         .createPendingIntent()
 
 

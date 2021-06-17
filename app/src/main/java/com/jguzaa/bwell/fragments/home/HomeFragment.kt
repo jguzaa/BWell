@@ -2,22 +2,19 @@ package com.jguzaa.bwell.fragments.home
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.jguzaa.bwell.R
-import com.jguzaa.bwell.databinding.ActivityMainBinding
-import com.jguzaa.bwell.databinding.FragmentHomeBinding
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.jguzaa.bwell.R
 import com.jguzaa.bwell.data.local.HabitDatabase
+import com.jguzaa.bwell.databinding.FragmentHomeBinding
+import com.jguzaa.bwell.fragments.DashboardFragment
+import com.jguzaa.bwell.fragments.DashboardFragmentDirections
 
 class HomeFragment : Fragment() {
 
@@ -45,7 +42,7 @@ class HomeFragment : Fragment() {
 
         //when fab clicked, direct to create habit activity
         binding.fabButton.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboardFragment_to_createHabitFragment)
+            findNavController().navigate(DashboardFragmentDirections.actionDashboardFragmentToCreateHabitFragment())
         }
 
         val manager = LinearLayoutManager(activity)
@@ -53,6 +50,7 @@ class HomeFragment : Fragment() {
 
         val adapter = HabitAdapter(HabitListener { habitId ->
             Log.d(TAG, "list tabbed = $habitId")
+            viewModel.onHabitClicked(habitId)
         })
         binding.habitList.adapter = adapter
 
@@ -60,6 +58,14 @@ class HomeFragment : Fragment() {
             it?.let{
                 adapter.submitList(it)
             }
+        })
+
+        //Navigate to habitDetail when liveData changed
+        viewModel.navigateToHabitDetail.observe(viewLifecycleOwner, Observer {
+                habitId -> habitId?.let{
+                    findNavController().navigate(DashboardFragmentDirections.actionDashboardFragmentToHabitDetailFragment(habitId))
+                    viewModel.resetNavigate()
+                }
         })
 
         // Inflate the layout for this fragment

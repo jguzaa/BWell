@@ -18,7 +18,6 @@ import com.jguzaa.bwell.data.local.HabitDatabaseDao
 import com.jguzaa.bwell.receiver.AlarmReceiver
 import com.jguzaa.bwell.util.cancelNotifications
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*

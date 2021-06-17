@@ -11,13 +11,10 @@ import com.jguzaa.bwell.data.Habit
 interface HabitDatabaseDao {
 
     @Insert
-    suspend fun insert(habit: Habit): Long
+    suspend fun insert(habit: Habit)
 
     @Update
     suspend fun update(habit: Habit)
-
-    @Query("SELECT * from habit_table WHERE habitId = :key")
-    suspend fun get(key: Long): Habit?
 
     @Query("DELETE FROM habit_table")
     suspend fun clear()
