@@ -1,13 +1,8 @@
 package com.jguzaa.bwell.fragments.createHabit
 
-import android.app.AlarmManager
 import android.app.Application
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,8 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.HabitsType
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
-import com.jguzaa.bwell.receiver.AlarmReceiver
-import com.jguzaa.bwell.util.cancelNotifications
+import com.jguzaa.bwell.util.APP_NAME
+import com.jguzaa.bwell.util.ID
+import com.jguzaa.bwell.util.setAlarm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,22 +32,11 @@ class CreateHabitViewModel(
         private const val TAG = "CreateHabitViewModel"
         private const val HOUR = "setHour"
         private const val MINUTE = "setMinute"
-        private const val REQUEST_CODE = 0
-        private const val APP_NAME = "com.jguzaa.bwell"
-        private const val ID = "HabitId"
     }
-
-    //========Notification implement
-    private var notifyPendingIntent: PendingIntent
-
-    private val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-    private val notifyIntent = Intent(app, AlarmReceiver::class.java)
 
     //Habit properties
     private var setHour: Int = 0
     private var setMinute: Int = 0
-    private var triggerTime = 0L
     var habit = Habit()
 
 
@@ -59,38 +44,7 @@ class CreateHabitViewModel(
     private var prefs = app.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE)
 
     init {
-
         _dataLoading.value = false
-
-        notifyPendingIntent = PendingIntent.getBroadcast(
-            getApplication(),
-            REQUEST_CODE,
-            notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-    }
-
-    private fun setAlarm(){
-        Log.d(TAG, "setAlarm, id from dao = ${habit.habitId}")
-        //set the data to pending intent
-        notifyIntent.putExtra(ID,habit.habitId)
-        notifyIntent.action = APP_NAME
-
-        notifyPendingIntent = PendingIntent.getBroadcast(
-            getApplication(),
-            REQUEST_CODE,
-            notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        //Alarm manager for pending intent to run in the background
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            triggerTime,
-            AlarmManager.INTERVAL_DAY,
-            notifyPendingIntent
-        )
     }
 
     fun start(){
@@ -106,25 +60,19 @@ class CreateHabitViewModel(
         Log.d(TAG, "Clicked, Hour = $setHour, Min = $setMinute")
         Log.d(TAG, "Clicked, Habit name = ${habit.name}")
 
-        // cancel old notification before start the new one
-        val notificationManager = ContextCompat.getSystemService(app, NotificationManager::class.java) as NotificationManager
-        notificationManager.cancelNotifications()
-
-        //set trigger time
+        //set notification time
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, setHour)
         calendar.set(Calendar.MINUTE, setMinute)
         calendar.set(Calendar.SECOND, 0)
 
-        triggerTime = calendar.timeInMillis
-
-        habit.notificationTime = triggerTime
+        habit.notificationTime = calendar.timeInMillis
 
         viewModelScope.launch {
             saveHabit(habit)
         }
         addHabit()
-        setAlarm()
+        setAlarm(habit.habitId, habit.name, app, habit.notificationTime)
 
     }
 
@@ -136,21 +84,8 @@ class CreateHabitViewModel(
     }
 
     private suspend fun getLastHabitId(): Long {
-        return if (database.getLastHabit() == null)
-            0L
-        else
-            database.getLastHabit()!!.habitId
-
-    }
-
-    fun onClear(){
-        viewModelScope.launch{
-            clear()
-        }
-    }
-
-    private suspend fun clear() {
-        database.clear()
+        return if (database.getLastHabit() == null) 0L
+        else database.getLastHabit()!!.habitId
     }
 
     //====================Misc======================
@@ -159,8 +94,8 @@ class CreateHabitViewModel(
         setMinute = minute
     }
 
-    fun setTimeSelected(timerLengthSelection: Int) {
-        when (timerLengthSelection){
+    fun setTimeSelected(selection: Int) {
+        when (selection){
             0 -> habit.type = HabitsType.DAILY_TRACKING
             1 -> habit.type = HabitsType.ALARM_CLOCK
             2 -> habit.type = HabitsType.JOGGING
@@ -168,6 +103,7 @@ class CreateHabitViewModel(
         Log.d(TAG, "habit type = ${habit.type}")
     }
 
+    // TODO: need to update
     private suspend fun saveHabit(habitAdd: Habit) =
         withContext(Dispatchers.IO) {
             prefs.edit().putLong(ID, habitAdd.habitId).apply()
@@ -182,7 +118,7 @@ class CreateHabitViewModel(
                 setHour = prefs.getInt(HOUR, 0)
                 setMinute = prefs.getInt(MINUTE, 0)
                 Log.d(TAG, "Load, habit id = ${habit.habitId}")
-                setAlarm()
+                //setAlarm()
             }
         }
     }

@@ -3,12 +3,11 @@ package com.jguzaa.bwell.fragments.habitDetail
 import android.app.Application
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -20,11 +19,7 @@ import com.jguzaa.bwell.data.HabitsType
 import com.jguzaa.bwell.data.ONE_DAY_MILLIS
 import com.jguzaa.bwell.data.local.HabitDatabase
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
-import com.jguzaa.bwell.databinding.FragmentCreateHabitBinding
 import com.jguzaa.bwell.databinding.FragmentHabitDetailBinding
-import com.jguzaa.bwell.fragments.createHabit.CreateHabitFragmentDirections
-import com.jguzaa.bwell.fragments.createHabit.CreateHabitViewModel
-import com.jguzaa.bwell.fragments.createHabit.CreateHabitViewModelFactory
 import java.util.*
 
 class HabitDetailFragment : Fragment() {
@@ -38,11 +33,6 @@ class HabitDetailFragment : Fragment() {
     private lateinit var habit: Habit
 
     private lateinit var viewModel: HabitDetailViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +53,7 @@ class HabitDetailFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.habitDetailViewModel = viewModel
 
-        viewModel.habit.observe(viewLifecycleOwner, Observer{
+        viewModel.habit.observe(viewLifecycleOwner, {
             habit = it
 
             //set up detail
@@ -75,16 +65,17 @@ class HabitDetailFragment : Fragment() {
 
             val dayLeft = HABIT_DATE - habit.streak
 
-            binding.dayLeft.text =
-                if(dayLeft >= 0){
-                    resources.getQuantityString(
-                        R.plurals.day_left,
-                        dayLeft,
-                        dayLeft
-                    )
-                } else {
-                    getString(R.string.finished)
-                }
+            if(dayLeft >= 0){
+                binding.dayLeft.text = resources.getQuantityString(
+                    R.plurals.day_left,
+                    dayLeft,
+                    dayLeft
+                )
+            } else {
+                binding.dayLeft.text = getString(R.string.finished)
+                binding.finishBtn.isEnabled = false
+                binding.snoozeBtn.isEnabled = false
+            }
 
             val width = binding.container.width
 
@@ -112,7 +103,7 @@ class HabitDetailFragment : Fragment() {
 
                 val builder = AlertDialog.Builder(requireContext())
                 //set title for alert dialog
-                builder.setTitle(R.string.confirm_snooze_title)
+                builder.setTitle(R.string.ask_to_confirm_title)
                 //set message for alert dialog
                 builder.setMessage(R.string.confirm_snooze_text)
                 builder.setIcon(android.R.drawable.ic_dialog_alert)
@@ -120,8 +111,7 @@ class HabitDetailFragment : Fragment() {
                 //performing positive action
                 builder.setPositiveButton("Yes"){ _, _ ->
                     Log.d(TAG, "reset streak")
-                    habit.streak = 0
-                    habit.isSnoozed = true
+                    viewModel.snoozeAndResetStreak()
                 }
                 //performing cancel action
                 builder.setNeutralButton("Cancel"){ _, _ ->
@@ -134,10 +124,12 @@ class HabitDetailFragment : Fragment() {
                 alertDialog.setCancelable(false)
                 alertDialog.show()
 
-            } else
-                habit.isSnoozed = true
+            } else viewModel.snooze()
 
-            viewModel.snooze(habit)
+        }
+
+        binding.customizeBtn.setOnClickListener {
+            findNavController().navigate(HabitDetailFragmentDirections.actionHabitDetailFragmentToHabitCustomizeFragment(habit.habitId))
         }
 
         return binding.root

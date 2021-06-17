@@ -1,10 +1,7 @@
 package com.jguzaa.bwell.data.local
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.jguzaa.bwell.data.Habit
 
 @Dao
@@ -30,5 +27,8 @@ interface HabitDatabaseDao {
     suspend fun getLastHabit(): Habit?
 
     @Query("SELECT * from habit_table WHERE habitId = :key")
-    suspend fun getHabitWithIdNonLiveReturn(key: Long): Habit?
+    fun getHabitWithIdNonLiveReturn(key: Long): Habit?
+
+    @Delete
+    fun deleteHabit(habit: Habit)
 }

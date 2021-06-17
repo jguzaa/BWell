@@ -1,9 +1,7 @@
 package com.jguzaa.bwell.util
 
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -11,12 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
 import com.jguzaa.bwell.MainActivity
 import com.jguzaa.bwell.R
-import com.jguzaa.bwell.fragments.AccountFragment
 
-
-private const val NOTIFICATION_ID = 0
-private const val REQUEST_CODE = 0
-private const val FLAGS = 0
 private const val TAG = "NotificationUtils"
 
 fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context, id: Long) {
@@ -33,7 +26,6 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         .setDestination(R.id.habitDetailFragment)
         .setArguments(args)
         .createPendingIntent()
-
 
     //add logo
     val logoImage = BitmapFactory.decodeResource(
@@ -59,9 +51,5 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         .setLargeIcon(logoImage)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-    notify(NOTIFICATION_ID, builder.build())
-}
-
-fun NotificationManager.cancelNotifications(){
-    cancelAll()
+    notify(id.toInt(), builder.build())
 }

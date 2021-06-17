@@ -2,7 +2,7 @@
     <string name="app_name">BWell</string>
 
     <!-- Notification -->
-    <string name="notification_msg">It\'s time to finish the activity!</string>
+    <string name="notification_msg">It\'s time to finish %s !</string>
     <string name="habit_notification_channel_id" translatable="false">habit_channel</string>
     <string name="habit_notification_channel_name" translatable="true">Habit</string>
 
@@ -27,16 +27,21 @@
         <item quantity="other">%d days left</item>
     </plurals>
     <string name="finished">Congratulations, you\'ve finished it</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- habit detail -->
+    <!-- habit details -->
     <string name="example_habit">Example Habit</string>
     <string name="keep_up">Keep it up!</string>
     <string name="done_btn">Done for today</string>
     <string name="snooze_btn">Snooze for today</string>
     <string name="customize_btn">Customize habit</string>
-    <string name="confirm_snooze_title">Are you sure?</string>
+    <string name="ask_to_confirm_title">Are you sure?</string>
     <string name="confirm_snooze_text">If you snooze this time,\nYou will lose all of your habit record! </string>
+
+    <!-- habit customize -->
+    <string name="customize_title">Customize %s</string>
+    <string name="delete_habit">Delete this habit</string>
+    <string name="tap_time_change">Tap to change notice time</string>
+    <string name="notification_time">Notification time %s</string>
+    <string name="confirm_delete_text">This process cannot be undone!</string>
 
 </resources>

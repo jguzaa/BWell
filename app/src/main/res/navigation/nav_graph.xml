@@ -39,5 +39,26 @@
         <argument
             android:name="habitId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_habitDetailFragment_to_habitCustomizeFragment"
+            app:destination="@id/habitCustomizeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/habitCustomizeFragment"
+        android:name="com.jguzaa.bwell.HabitCustomizeFragment"
+        android:label="HabitCustomizeFragment" >
+        <action
+            android:id="@+id/action_habitCustomizeFragment_to_habitDetailFragment"
+            app:destination="@id/habitDetailFragment"
+            app:popUpTo="@id/habitDetailFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="habitId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_habitCustomizeFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
