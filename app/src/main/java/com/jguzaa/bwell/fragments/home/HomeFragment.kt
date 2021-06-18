@@ -54,14 +54,14 @@ class HomeFragment : Fragment() {
         })
         binding.habitList.adapter = adapter
 
-        viewModel.habits.observe(viewLifecycleOwner, Observer {
+        viewModel.habits.observe(viewLifecycleOwner, {
             it?.let{
                 adapter.submitList(it)
             }
         })
 
         //Navigate to habitDetail when liveData changed
-        viewModel.navigateToHabitDetail.observe(viewLifecycleOwner, Observer {
+        viewModel.navigateToHabitDetail.observe(viewLifecycleOwner, {
                 habitId -> habitId?.let{
                     findNavController().navigate(DashboardFragmentDirections.actionDashboardFragmentToHabitDetailFragment(habitId))
                     viewModel.resetNavigate()
@@ -71,11 +71,6 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
 
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

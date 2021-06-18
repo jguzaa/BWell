@@ -35,31 +35,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        //create channel
-        createChannel(
-            getString(R.string.habit_notification_channel_id),
-            getString(R.string.habit_notification_channel_name)
-        )
-
-    }
-
-    private fun createChannel(channelId: String, channelName: String) {
-
-        Log.d(TAG, "Channel created")
-
-        //START create a channel
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val notificationChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.RED
-            notificationChannel.enableVibration(true)
-            notificationChannel.description = "Habit"
-            notificationChannel.setShowBadge(false)
-
-            val notificationManager = this.getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
-
     }
 
 }
