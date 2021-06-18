@@ -18,17 +18,15 @@ import com.jguzaa.bwell.fragments.SettingFragment
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
     companion object {
-        //fun newInstance() = DashboardFragment()
         private const val TAG = "MainActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
 
         //view binding
         binding = ActivityMainBinding.inflate(layoutInflater)

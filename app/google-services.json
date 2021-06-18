@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "375562694966",
+    "project_id": "bwell-68aee",
+    "storage_bucket": "bwell-68aee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375562694966:android:42fe90ae7c5a8482fc0397",
+        "android_client_info": {
+          "package_name": "com.jguzaa.bwell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375562694966-v8fjuho4lljrdsvd75sub2rtd7lrd6rt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6ySsKgFzxf9CkiVb8RC_ftY7EfIgaUSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375562694966-v8fjuho4lljrdsvd75sub2rtd7lrd6rt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

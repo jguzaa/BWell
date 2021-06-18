@@ -44,4 +44,10 @@
     <string name="notification_time">Notification time %s</string>
     <string name="confirm_delete_text">This process cannot be undone!</string>
 
+    <!-- Login Activity -->
+    <string name="login_google">Log in with google account</string>
+
+    <!-- Account Fragment -->
+    <string name="sign_out">Sign out</string>
+
 </resources>

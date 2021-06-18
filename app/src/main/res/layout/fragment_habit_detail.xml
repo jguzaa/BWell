@@ -9,17 +9,13 @@
             type="com.jguzaa.bwell.fragments.habitDetail.HabitDetailViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.habitDetail.HabitDetailFragment">
-
-        <ScrollView
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:isScrollContainer="true"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            tools:context=".fragments.habitDetail.HabitDetailFragment">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -143,24 +139,6 @@
 
             </LinearLayout>
 
-
         </ScrollView>
-
-        <ProgressBar
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/loading"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"
-            android:background="@color/deep_orange_dark"
-            />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </layout>
