@@ -55,6 +55,7 @@
             android:layout_margin="16dp"
             app:fabSize="normal"
             android:src="@drawable/ic_add"
+            android:contentDescription="@string/add_habit_btn_label"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -54,7 +54,7 @@
                     android:layout_height="60dp"
                     android:layout_margin="16dp"
                     android:src="@drawable/code"
-                    android:importantForContentCapture="no"/>
+                    android:importantForAccessibility="no"/>
 
                 <TextView
                     android:layout_width="wrap_content"

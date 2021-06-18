@@ -81,7 +81,7 @@
                             android:layout_marginStart="16dp"
                             android:id="@+id/habit_icon"
                             tools:src="@drawable/clock"
-                            android:importantForContentCapture="no"/>
+                            android:importantForAccessibility="no"/>
 
                         <TextView
                             android:layout_width="wrap_content"
