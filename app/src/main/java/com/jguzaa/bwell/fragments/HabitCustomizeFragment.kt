@@ -1,4 +1,4 @@
-package com.jguzaa.bwell
+package com.jguzaa.bwell.fragments
 
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.TimePicker
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.jguzaa.bwell.R
 import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.local.HabitDatabase
 import com.jguzaa.bwell.databinding.FragmentHabitCustomizeBinding
@@ -64,7 +64,10 @@ class HabitCustomizeFragment : Fragment(), OnTimeSetListener {
         })
 
         binding.backBtn.setOnClickListener {
-            findNavController().navigate(HabitCustomizeFragmentDirections.actionHabitCustomizeFragmentToHabitDetailFragment(habit.habitId))
+            findNavController().navigate(HabitCustomizeFragmentDirections.actionHabitCustomizeFragmentToHabitDetailFragment(
+                    habit.habitId
+                )
+            )
         }
 
         binding.timeChangeTab.setOnClickListener {

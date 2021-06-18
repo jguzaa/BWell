@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/habitCustomizeFragment"
-        android:name="com.jguzaa.bwell.HabitCustomizeFragment"
+        android:name="com.jguzaa.bwell.fragments.HabitCustomizeFragment"
         android:label="HabitCustomizeFragment" >
         <action
             android:id="@+id/action_habitCustomizeFragment_to_habitDetailFragment"

@@ -1,21 +1,15 @@
 package com.jguzaa.bwell.fragments
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import com.jguzaa.bwell.R
 import com.jguzaa.bwell.databinding.FragmentDashboardBinding
-import com.jguzaa.bwell.databinding.FragmentHomeBinding
 import com.jguzaa.bwell.fragments.home.HomeFragment
-import com.jguzaa.bwell.fragments.home.HomeViewModel
+import com.jguzaa.bwell.fragments.setting.SettingFragment
 
 class DashboardFragment : Fragment() {
 

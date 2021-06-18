@@ -110,4 +110,18 @@ class HabitDetailViewModel(
         }
     }
 
+    fun clearAll(){
+        viewModelScope.launch{
+            withContext(Dispatchers.IO) {
+
+                //TODO : Clear notification for all habits
+
+                database.clear()
+            }
+        }
+
+        //TODO : sign out google account
+
+    }
+
 }

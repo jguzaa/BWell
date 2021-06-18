@@ -19,12 +19,13 @@ import com.jguzaa.bwell.data.ONE_DAY_MILLIS
 import com.jguzaa.bwell.data.local.HabitDatabase
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
 import com.jguzaa.bwell.databinding.FragmentHabitDetailBinding
+
 import java.util.*
 
 class HabitDetailFragment : Fragment() {
 
     companion object {
-        private const val TAG = "HabitDetail"
+        private const val TAG = "HabitDetailFragment"
     }
 
     private var _binding: FragmentHabitDetailBinding? = null
@@ -135,7 +136,6 @@ class HabitDetailFragment : Fragment() {
     }
 
 }
-
 
 
 class HabitDetailViewModelFactory (

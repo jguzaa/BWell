@@ -50,4 +50,7 @@
     <!-- Account Fragment -->
     <string name="sign_out">Sign out</string>
 
+    <!-- Setting Fragment -->
+    <string name="reset">Reset All Data</string>
+
 </resources>
