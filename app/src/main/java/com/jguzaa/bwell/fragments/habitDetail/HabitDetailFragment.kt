@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -77,13 +78,15 @@ class HabitDetailFragment : Fragment() {
                 binding.snoozeBtn.isEnabled = false
             }
 
-            val width = binding.container.width
+            binding.container.doOnLayout { it ->
+                Log.d(TAG, "width = ${it.width}")
+                val width = it.width
+                val widthByPercent = width * habit.finishPercentages / 100
 
-            val widthByPercent = width * habit.finishPercentages / 100
-
-            val params = binding.progressBar.layoutParams
-            params.width = widthByPercent
-            binding.progressBar.layoutParams = params
+                val params = binding.progressBar.layoutParams
+                params.width = widthByPercent
+                binding.progressBar.layoutParams = params
+            }
 
             binding.completePercentage.text = getString(R.string.progress_text, habit.finishPercentages)
 
@@ -134,7 +137,6 @@ class HabitDetailFragment : Fragment() {
 
         return binding.root
     }
-
 }
 
 
