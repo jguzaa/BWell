@@ -11,6 +11,5 @@ User can snooze for habit completion only for 2 day, then the habit traker will 
 ###########################################################
 
 The things have to be implemented in the future
-- Firebase database for online data syncing (For now all data only keep in local storage)
 - Full function alarmclock
 - Google maps implementation for jogging habit
