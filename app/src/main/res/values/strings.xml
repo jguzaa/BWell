@@ -52,5 +52,14 @@
 
     <!-- Setting Fragment -->
     <string name="reset">Reset All Data</string>
+    <string name="backup">Back up to cloud</string>
+    <string name="restore">Restore from cloud</string>
+    <string name="backup_success">Back up success!</string>
+    <string name="backup_fail">Back up failed! Please try again later</string>
+    <string name="restore_success">Restore from cloud success!</string>
+    <string name="restore_fail">Restore failed! Please try again later</string>
+    <string name="restore_confirm">Warning! The local data will be overwritten by cloud data</string>
+    <string name="error">Error!</string>
+    <string name="try_to_connect">Trying to connect server, Please check the connection</string>
 
 </resources>

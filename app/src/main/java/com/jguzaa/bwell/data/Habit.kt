@@ -4,10 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 const val HABIT_DATE = 66
-const val SNOOZE_ALLOW = 2
 const val ONE_SECOND_MILLIS = 1000
 const val ONE_MINUTE_MILLIS = ONE_SECOND_MILLIS * 60
 const val ONE_HOUR_MILLIS = ONE_MINUTE_MILLIS * 60

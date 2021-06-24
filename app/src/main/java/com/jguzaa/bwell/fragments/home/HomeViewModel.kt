@@ -15,7 +15,7 @@ class HomeViewModel(
 
     val habits = database.getAllHabitsLiveData()
 
-    private val _navigateToHabitDetail = MutableLiveData<Long>()
+    private val _navigateToHabitDetail = MutableLiveData<Long?>()
     val navigateToHabitDetail get() = _navigateToHabitDetail
 
     fun onHabitClicked(id: Long) {

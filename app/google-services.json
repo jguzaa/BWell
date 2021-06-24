@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "375562694966",
+    "firebase_url": "https://bwell-68aee-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "bwell-68aee",
     "storage_bucket": "bwell-68aee.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "375562694966-4562revj8cin1f8gi6qcdagm5qftppls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jguzaa.bwell",
+            "certificate_hash": "cbec44ec94c452eedd05f8d5e44151003df08577"
+          }
+        },
         {
           "client_id": "375562694966-v8fjuho4lljrdsvd75sub2rtd7lrd6rt.apps.googleusercontent.com",
           "client_type": 3

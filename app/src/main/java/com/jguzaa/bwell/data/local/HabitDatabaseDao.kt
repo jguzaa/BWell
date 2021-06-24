@@ -10,6 +10,9 @@ interface HabitDatabaseDao {
     @Insert
     suspend fun insert(habit: Habit): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertIgnorePrimaryKey(habit: Habit)
+
     @Update
     suspend fun update(habit: Habit)
 

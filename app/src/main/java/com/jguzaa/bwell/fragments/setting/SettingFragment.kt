@@ -2,29 +2,25 @@ package com.jguzaa.bwell.fragments.setting
 
 import android.app.Application
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.jguzaa.bwell.LoginActivity
 import com.jguzaa.bwell.R
-import com.jguzaa.bwell.data.Habit
 import com.jguzaa.bwell.data.local.HabitDatabase
 import com.jguzaa.bwell.data.local.HabitDatabaseDao
-import com.jguzaa.bwell.databinding.FragmentCreateHabitBinding
-import com.jguzaa.bwell.databinding.FragmentHabitDetailBinding
 import com.jguzaa.bwell.databinding.FragmentSettingBinding
-import com.jguzaa.bwell.fragments.HabitCustomizeFragment
-import com.jguzaa.bwell.fragments.HabitCustomizeFragmentDirections
-import com.jguzaa.bwell.fragments.createHabit.CreateHabitViewModel
-import com.jguzaa.bwell.fragments.createHabit.CreateHabitViewModelFactory
-import com.jguzaa.bwell.fragments.habitDetail.HabitDetailViewModel
+import com.jguzaa.bwell.util.FAIL_CODE
+import com.jguzaa.bwell.util.LOADING_CODE
+import com.jguzaa.bwell.util.SUCCESS_CODE
+import com.jguzaa.bwell.util.StatusCallback
 
 class SettingFragment : Fragment() {
 
@@ -55,27 +51,94 @@ class SettingFragment : Fragment() {
         binding.resetTab.setOnClickListener {
 
             val builder = AlertDialog.Builder(requireContext())
-            //set title for alert dialog
-            builder.setTitle(R.string.ask_to_confirm_title)
-            //set message for alert dialog
-            builder.setMessage(R.string.confirm_delete_text)
-            builder.setIcon(android.R.drawable.ic_dialog_alert)
-
-            //performing positive action
-            builder.setPositiveButton("Yes"){ _, _ ->
-                viewModel.resetAll()
-                startActivity(Intent(requireContext(), LoginActivity::class.java))
-                activity?.finish()
+            builder.apply {
+                //set title for alert dialog
+                setTitle(R.string.ask_to_confirm_title)
+                //set message for alert dialog
+                setMessage(R.string.confirm_delete_text)
+                setIcon(android.R.drawable.ic_dialog_alert)
+                //performing positive action
+                setPositiveButton("Yes"){ _, _ ->
+                    viewModel.resetAll()
+                    viewModel.signOut()
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                    activity?.finish()
+                }
+                //performing cancel action
+                setNeutralButton("Cancel"){ _, _ -> }
             }
-            //performing cancel action
-            builder.setNeutralButton("Cancel"){ _, _ -> }
 
             // Create the AlertDialog
             val alertDialog: AlertDialog = builder.create()
             // Set other dialog properties
-            alertDialog.setCancelable(false)
-            alertDialog.show()
+            alertDialog.apply {
+                setCancelable(false)
+                show()
+            }
+
         }
+
+        binding.backupTab.setOnClickListener {
+
+            viewModel.backupToFirebase(object: StatusCallback{
+                override fun onCallback(status: Int) {
+
+                    when (status){
+                        SUCCESS_CODE -> Toast.makeText(requireContext(), getString(R.string.backup_success), Toast.LENGTH_SHORT).show()
+                        FAIL_CODE -> Toast.makeText(requireContext(), getString(R.string.backup_fail), Toast.LENGTH_SHORT).show()
+                        else -> Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            })
+
+        }
+
+        binding.restoreTab.setOnClickListener {
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.apply {
+                //set title for alert dialog
+                setTitle(R.string.ask_to_confirm_title)
+                //set message for alert dialog
+                setMessage(R.string.restore_confirm)
+                setIcon(android.R.drawable.ic_dialog_alert)
+                //performing positive action
+                setPositiveButton("Yes"){ _, _ ->
+
+                    viewModel.restoreFromFirebase(object: StatusCallback{
+                        override fun onCallback(status: Int) {
+
+                            when (status){
+                                SUCCESS_CODE -> Toast.makeText(requireContext(), getString(R.string.restore_success), Toast.LENGTH_SHORT).show()
+                                FAIL_CODE -> Toast.makeText(requireContext(), getString(R.string.restore_fail), Toast.LENGTH_SHORT).show()
+                                else -> Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                    })
+
+                }
+                //performing cancel action
+                setNeutralButton("Cancel"){ _, _ -> }
+            }
+
+            // Create the AlertDialog
+            val alertDialog: AlertDialog = builder.create()
+            // Set other dialog properties
+            alertDialog.apply {
+                setCancelable(false)
+                show()
+            }
+
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner,{
+            if(it)
+                binding.loading.visibility = View.VISIBLE
+            else
+                binding.loading.visibility = View.GONE
+        })
 
         return binding.root
     }
