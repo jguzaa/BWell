@@ -66,10 +66,12 @@ class SettingViewModel(
                 habits = database.getAllHabits()
 
                 for(habit in habits){
+
                     firebaseDatabase.child(habit.habitId.toString()).setValue(habit)
                         .addOnSuccessListener {
                             Log.d(TAG, "Backing up : id = ${habit.habitId}")
-                            statusCallback.onCallback(SUCCESS_CODE)
+                            if(habit == habits.last())
+                                statusCallback.onCallback(SUCCESS_CODE)
                         }
                         .addOnFailureListener {
                             Log.d(TAG, "failed : $it")
